@@ -66,15 +66,16 @@ const port = 3000;
 
 // MSSQL Configuration
 const dbConfig = {
-  server: 'DESKTOP-AJ58TNK', // Ensure this is correct
-  database: 'Rely', // Ensure this is correct
+  server: 'DESKTOP-AJ58TNK', 
+  database: 'Rely', 
   options: {
     trustedConnection: true,
     enableArithAbort: true,
-    encrypt: false, // Set to true if you're using Azure
+    encrypt: false, 
   },
-  driver: 'msnodesqlv8', // Ensure the driver is correctly installed
+  driver: 'msnodesqlv8',
 };
+
 
 sql.connect(dbConfig).then(pool => {
   console.log('Connected to the database!');
