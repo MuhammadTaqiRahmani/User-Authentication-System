@@ -1,3 +1,76 @@
+const express = require('express');
+const path = require('path');
+const fs = require('fs');
+const sql = require('mssql');
+
+const app = express();
+const hostname = '127.0.0.1';
+const port = 3000;
+
+// MSSQL Configuration
+const sql = require('msnodesqlv8');
+
+// Connection configuration
+const config = {
+    server: 'localhost', // Server IP address or hostname
+    database: 'Rely', // Database name
+    options: {
+        trustedConnection: true, // Use Windows Authentication
+        encrypt: false // Disable encryption for local development
+    }
+};
+
+// Connection string
+const connectionString = `Driver={SQL Server Native Client 11.0};Server=${config.server};Database=${config.database};Trusted_Connection=yes;`;
+
+// Connect to SQL Server
+sql.open(connectionString, (err, connection) => {
+    if (err) {
+        console.error("Connection Failed:", err.message);
+        return;
+    }
+    console.log("Connection Successful!");
+
+    // Example query
+    connection.query('SELECT * FROM SomeTable', (err, results) => {
+        if (err) {
+            console.error("Query Failed:", err.message);
+            return;
+        }
+        console.log("Query Results:", results);
+    });
+});
+
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, 'index.html'));
+});
+
+app.get('/signin', (req, res) => {
+  res.sendFile(path.join(__dirname, 'signin.html'));
+});
+
+app.get('/signup', (req, res) => {
+  res.sendFile(path.join(__dirname, 'signup.html'));
+});
+
+app.use(express.static(path.join(__dirname)));
+
+app.use((req, res, next) => {
+  fs.readFile(path.join(__dirname, '404.html'), 'utf8', (err, data) => {
+    if (err) {
+      res.status(404).send('<h1>404 Not Found</h1>');
+    } else {
+      res.status(404).send(data);
+    }
+  });
+});
+
+app.listen(port, hostname, () => {
+  console.log(`Server running at http://${hostname}:${port}/`);
+});
+
+
+
 // const express = require('express');
 // const path = require('path');
 // const fs = require('fs');
@@ -9,20 +82,25 @@
 
 // // MSSQL Configuration
 // const dbConfig = {
-//   server: 'DESKTOP-AJ58TNK', // Replace with your server name
-//   database: 'Rely', // Replace with your database name
+//   server: 'DESKTOP-AJ58TNK', 
+//   database: 'Rely', 
 //   options: {
 //     trustedConnection: true,
 //     enableArithAbort: true,
-//     encrypt: false, // Set to true if you're using Azure
+//     encrypt: false, 
 //   },
-//   driver: 'msnodesqlv8', // Necessary for Windows Authentication
+//   driver: 'msnodesqlv8',
 // };
 
-// sql.connect(dbConfig).then(() => {
+
+// sql.connect(dbConfig).then(pool => {
 //   console.log('Connected to the database!');
+//   return pool.request().query('SELECT 1 AS number');
+// }).then(result => {
+//   console.log('Query result:', result.recordset);
 // }).catch(err => {
 //   console.error('Database connection failed:', err);
+//   console.error('SQL Server Error Details:', err.originalError);
 // });
 
 // app.get('/', (req, res) => {
@@ -55,62 +133,73 @@
 
 
 
-const express = require('express');
-const path = require('path');
-const fs = require('fs');
-const sql = require('mssql');
-
-const app = express();
-const hostname = '127.0.0.1';
-const port = 3000;
-
-// MSSQL Configuration
-const dbConfig = {
-  server: 'DESKTOP-AJ58TNK', 
-  database: 'Rely', 
-  options: {
-    trustedConnection: true,
-    enableArithAbort: true,
-    encrypt: false, 
-  },
-  driver: 'msnodesqlv8',
-};
 
 
-sql.connect(dbConfig).then(pool => {
-  console.log('Connected to the database!');
-  return pool.request().query('SELECT 1 AS number');
-}).then(result => {
-  console.log('Query result:', result.recordset);
-}).catch(err => {
-  console.error('Database connection failed:', err);
-  console.error('SQL Server Error Details:', err.originalError);
-});
 
-app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'index.html'));
-});
+// const express = require('express');
+// const path = require('path');
+// const fs = require('fs');
+// const sql = require('mssql');
 
-app.get('/signin', (req, res) => {
-  res.sendFile(path.join(__dirname, 'signin.html'));
-});
+// const app = express();
 
-app.get('/signup', (req, res) => {
-  res.sendFile(path.join(__dirname, 'signup.html'));
-});
+// const port = 3000;
 
-app.use(express.static(path.join(__dirname)));
+// // MSSQL Configuration
+// const connectionString = {
+//   server: 'DESKTOP-AJ58TNK',
+//   database: 'Rely',
+//   options: {
+//     trustedConnection: true, // Use Windows Authentication
+//     enableArithAbort: true,
+//     encrypt: false, // For local development, set to false
+//   },
+//   driver: 'msnodesqlv8', // Ensure this driver is installed
+// };
 
-app.use((req, res, next) => {
-  fs.readFile(path.join(__dirname, '404.html'), 'utf8', (err, data) => {
-    if (err) {
-      res.status(404).send('<h1>404 Not Found</h1>');
-    } else {
-      res.status(404).send(data);
-    }
-  });
-});
+// sql.connect(connectionString, err => {
+//   if (err) {
+//       throw err;
+//   }
+//   console.log("Connection Successful!");
+// });
 
-app.listen(port, hostname, () => {
-  console.log(`Server running at http://${hostname}:${port}/`);
-});
+
+
+
+// app.get("/", (req, res) => {
+//   res.sendFile(path.join(__dirname, 'index.html'));
+//   // Execute a SELECT query
+//   new sql.Request().query("SELECT * FROM mytable", (err, result) => {
+//       if (err) {
+//           console.error("Error executing query:", err);
+//       } else {
+//           res.send(result.recordset); // Send query result as response
+//           console.dir(result.recordset);
+//       }
+//   });
+// });
+
+// app.get('/signin', (req, res) => {
+//   res.sendFile(path.join(__dirname, 'signin.html'));
+// });
+
+// app.get('/signup', (req, res) => {
+//   res.sendFile(path.join(__dirname, 'signup.html'));
+// });
+
+// app.use(express.static(path.join(__dirname)));
+
+// app.use((req, res, next) => {
+//   fs.readFile(path.join(__dirname, '404.html'), 'utf8', (err, data) => {
+//     if (err) {
+//       res.status(404).send('<h1>404 Not Found</h1>');
+//     } else {
+//       res.status(404).send(data);
+//     }
+//   });
+// });
+
+// app.listen(port, () => {
+//   console.log(`Server running at http://${port}/`);
+// });
