@@ -11,14 +11,21 @@ const port = 3000;
 const sql = require('msnodesqlv8');
 
 // Connection configuration
+const { Connection, Request } = require('tedious');
+
+// Configuration for Windows Authentication
 const config = {
-    server: 'localhost', // Server IP address or hostname
-    database: 'Rely', // Database name
-    options: {
-        trustedConnection: true, // Use Windows Authentication
-        encrypt: false // Disable encryption for local development
-    }
+  server: 'localhost', // Server IP address or hostname
+  authentication: {
+    type: 'ntlm' // Use Windows Authentication
+  },
+  options: {
+    database: 'Rely', // Name of your database
+    encrypt: false, // Disable encryption for local development
+    trustServerCertificate: true // Trust self-signed certificates
+  }
 };
+
 
 // Connection string
 const connectionString = `Driver={SQL Server Native Client 11.0};Server=${config.server};Database=${config.database};Trusted_Connection=yes;`;

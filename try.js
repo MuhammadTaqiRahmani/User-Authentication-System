@@ -6,26 +6,30 @@ const sql = require("mssql");
 
 const app = express();
 
-var config = {
-    "server": "DESKTOP-AJ58TNK", // Local server IP address or hostname
-    "database": "Rely", // Database name
-    "options": {
-        "authentication": {
-            "type": "ntlm" // Use Windows Authentication
+var Connection = require('tedious').Connection;
+    var config = {
+        server: '127.0.0.1',  //update me
+        authentication: {
+            type: 'default',
+            options: {
+                userName: 'google', //update me
+                password: 'sqlserver'  //update me
+            }
         },
-        "encrypt": true, // Keep encryption enabled
-        "trustServerCertificate": true // Trust self-signed certificate
-    }
-};
+        options: {
+            encrypt: true,
+            trustServerCertificate: true,
+            database: 'Rely'  //update me
+            //trust the god damned certificates
+        }
+    };
+    var connection = new Connection(config);
+    connection.on('connect', function(err) {
+        // If no error, then good to proceed.
+        console.log("Connected");
+    });
 
-// Connect to SQL Server
-sql.connect(config, err => {
-    if (err) {
-        throw err;
-    }
-    console.log("Connection Successful!");
-});
-
+    connection.connect();
 // Define route for fetching data from SQL Server
 app.get("/", (request, response) => {
     // Execute a SELECT query
