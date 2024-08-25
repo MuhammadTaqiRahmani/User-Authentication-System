@@ -24,6 +24,7 @@
                   if (response.ok) {
                       const result = await response.text();
                       alert(result); // Alert success message
+                      window.location.href = '/signin';
                   } else {
                       const errorText = await response.text();
                       alert(errorText); // Alert error message
