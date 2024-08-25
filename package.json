@@ -19,6 +19,7 @@
     "tailwindcss": "^3.3.5"
   },
   "dependencies": {
+    "dotenv": "^16.4.5",
     "express": "^4.19.2",
     "msnodesqlv8": "^4.2.1",
     "mssql": "^11.0.1",

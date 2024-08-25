@@ -3,6 +3,7 @@ const path = require('path');
 const fs = require('fs');
 const bodyParser = require('body-parser');
 const { Connection, Request } = require('tedious');
+require('dotenv').config(); // Load environment variables
 
 const app = express();
 const hostname = '127.0.0.1';
@@ -11,18 +12,18 @@ const port = 3000;
 app.use(bodyParser.urlencoded({ extended: true }));
 
 const config = {
-  server: 'DESKTOP-AJ58TNK',
+  server: process.env.DB_SERVER,
   authentication: {
     type: 'ntlm',
     options: {
       domain: '', // Omit or leave empty for local accounts
-      userName: 'Skull Crusher',
-      password: 'berlin',
+      userName: process.env.USER_NAME,
+      password: process.env.PASSWORD,
     }
   },
   options: {
     encrypt: true,
-    database: 'Rely',
+    database: process.env.DB_DATABASE,
     trustServerCertificate: true,
   }
 };
