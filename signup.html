@@ -5,6 +5,35 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://cdn.tailwindcss.com"></script>
     <title>Relay-signup</title>
+    <script>
+      document.addEventListener('DOMContentLoaded', () => {
+          const form = document.querySelector('form');
+
+          form.addEventListener('submit', async (event) => {
+              event.preventDefault(); // Prevent the default form submission
+
+              const formData = new FormData(form);
+              const data = new URLSearchParams(formData);
+
+              try {
+                  const response = await fetch('/signup', {
+                      method: 'POST',
+                      body: data
+                  });
+
+                  if (response.ok) {
+                      const result = await response.text();
+                      alert(result); // Alert success message
+                  } else {
+                      const errorText = await response.text();
+                      alert(errorText); // Alert error message
+                  }
+              } catch (error) {
+                  alert('An error occurred. Please try again.');
+              }
+          });
+      });
+  </script>
 </head>
 <body>
     <div class="font-[sans-serif]">
