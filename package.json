@@ -21,7 +21,8 @@
   "dependencies": {
     "express": "^4.19.2",
     "msnodesqlv8": "^4.2.1",
-    "mssql": "^11.0.1"
+    "mssql": "^11.0.1",
+    "tedious": "^19.0.0"
   },
   "bugs": {
     "url": "https://github.com/uideck/play-tailwind/issues"

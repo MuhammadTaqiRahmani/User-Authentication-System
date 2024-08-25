@@ -13,7 +13,7 @@ var Connection = require('tedious').Connection;
             type: 'default',
             options: {
                 userName: 'google', //update me
-                password: 'sqlserver'  //update me
+                password: 'newpassword'  //update me
             }
         },
         options: {
