@@ -101,30 +101,24 @@ app.post('/signin', (req, res) => {
   const email = req.body.email;
   const password = req.body.password;
 
-  // Parameterized query to prevent SQL injection and handle data correctly
-  const query = `SELECT COUNT(*) AS count FROM Users WHERE Email = @Email AND Password = @Password`;
+  const checkLoginQuery = `SELECT id FROM Users WHERE Email = '${email}' AND Password = '${password}'`;
 
-  const request = new Request(query, (err, rowCount, rows) => {
+  const loginRequest = new Request(checkLoginQuery, (err, rowCount, rows) => {
     if (err) {
-      console.error('Error during sign-in:', err);
+      console.error('Error checking login:', err);
       res.status(500).send('Server error. Please try again later.');
     } else {
-      if (rowCount > 0 && rows[0][0].value > 0) {
-        // User authenticated successfully
-        res.status(200).send('User logged in successfully.');
+      if (rowCount > 0) {
+        res.status(200).send('You are logged in');
       } else {
-        // User not found or credentials incorrect
-        res.status(401).send('Invalid email or password.');
+        res.status(400).send('Invalid email or password');
       }
     }
   });
 
-  // Add parameters to the request to prevent SQL injection
-  request.addParameter('Email', TYPES.NVarChar, email);
-  request.addParameter('Password', TYPES.NVarChar, password);
-
-  connection.execSql(request);
+  connection.execSql(loginRequest);
 });
+
 
 
 app.use(express.static(path.join(__dirname)));
