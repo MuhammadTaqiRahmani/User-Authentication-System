@@ -1,0 +1,5 @@
+feat: Implemented complete user authentication system for chat app
+- Added signup and signin functionality with secure password hashing
+- Validated email domains and password length requirements
+- Ensured database integration for storing and verifying user credentials
+- Automatically creates Users table with correct schema on server start
